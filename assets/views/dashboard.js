@@ -153,6 +153,11 @@ async function openDashboard(id) {
   h += '<div style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">📚 章节</div><div style="font-size:18px;font-weight:700;color:var(--text)">' + ch.length + '</div></div>';
   h += '</div>';
 
+  // 时间线可视化
+  h += '<div class="section"><div class="section-title">🕰 编年史时间线</div>';
+  h += '<div class="timeline-viz-wrap" id="timelineVizContainer"></div>';
+  h += '</div>';
+
   // 编年史
   var tlEvents = [];
   ch.forEach(function(c) {
@@ -320,6 +325,11 @@ async function openDashboard(id) {
     h += '</div>';
   }
 
+  // 时间线可视化
+  h += '<div class="section"><div class="section-title">🕰 编年史时间线</div>';
+  h += '<div class="timeline-viz-wrap" id="timelineVizContainer"></div>';
+  h += '</div>';
+
   // 知识图谱
   h += '<div class="section"><div class="section-title">🕸 知识图谱</div>';
   h += '<div style="display:flex;gap:4px;margin-bottom:8px">';
@@ -340,6 +350,22 @@ async function openDashboard(id) {
   console.log('[graph] renderDashboardSidebar done, functions:', typeof switchGraphTab, typeof openGraphModal, typeof renderGraph);
   if (_graphLoaded === 0) { loadCytoscape(renderGraph); }
   else { setTimeout(renderGraph, 100); }
+  
+  // 加载时间线可视化
+  setTimeout(function() {
+    if (q('timelineVizContainer')) {
+      fetch(tu(A + '/api/project/' + encodeURIComponent(id) + '/timeline-data'))
+        .then(function(r) { return r.json(); })
+        .then(function(result) {
+          if (result.ok && result.timeline) {
+            renderTimelineViz(id, result.timeline, ch);
+          }
+        })
+        .catch(function(e) {
+          console.warn('[timeline] load failed:', e);
+        });
+    }
+  }, 200);
 }
 
 function loadCytoscape(cb) {

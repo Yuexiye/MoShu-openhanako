@@ -1,4 +1,4 @@
-import { safeProjectId } from "../lib/config.js";
+﻿import { safeProjectId } from "../lib/config.js";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -7,15 +7,16 @@ const MAX_IMG = 10 * 1024 * 1024;
 export default function (app, ctx) {
   const pid = ctx.pluginId, dd = ctx.dataDir, pd = ctx.pluginDir;
   // 启动时读取 assets 内嵌到 JS
-  var APPJS = "", APPCSS = "", WORLD_MAP_JS = "", VIEW_UTILS = "", VIEW_WRITING = "", VIEW_MAP = "", VIEW_DASH = "";
+  var APPJS = "", APPCSS = "", WORLD_MAP_JS = "", VIEW_UTILS = "", VIEW_WRITING = "", VIEW_MAP = "", VIEW_DASH = "", VIEW_TLVIZ = "";
   var jsp = path.join(pd, "assets", "app.js"), csp = path.join(pd, "assets", "app.css"), wmp = path.join(pd, "assets", "world-map.js");
-  var vup = path.join(pd, "assets", "views", "utils.js"), vwp = path.join(pd, "assets", "views", "writing.js"), vmp = path.join(pd, "assets", "views", "map.js"), vdp = path.join(pd, "assets", "views", "dashboard.js");
+  var vup = path.join(pd, "assets", "views", "utils.js"), vwp = path.join(pd, "assets", "views", "writing.js"), vmp = path.join(pd, "assets", "views", "map.js"), vdp = path.join(pd, "assets", "views", "dashboard.js"), vtp = path.join(pd, "assets", "views", "timeline-viz.js");
   try { if(fs.existsSync(jsp)) APPJS = fs.readFileSync(jsp, "utf-8"); } catch(e) {}
   try { if(fs.existsSync(csp)) APPCSS = fs.readFileSync(csp, "utf-8"); } catch(e) {}
   try { if(fs.existsSync(vup)) VIEW_UTILS = fs.readFileSync(vup, "utf-8"); } catch(e) {}
   try { if(fs.existsSync(vwp)) VIEW_WRITING = fs.readFileSync(vwp, "utf-8"); } catch(e) {}
   try { if(fs.existsSync(vmp)) VIEW_MAP = fs.readFileSync(vmp, "utf-8"); } catch(e) {}
   try { if(fs.existsSync(vdp)) VIEW_DASH = fs.readFileSync(vdp, "utf-8"); } catch(e) {}
+  try { if(fs.existsSync(vtp)) VIEW_TLVIZ = fs.readFileSync(vtp, "utf-8"); } catch(e) {}
 
   app.get("/ping", c => c.json({ ok: true, plugin: pid }));
   app.get("/api/projects", async c => { try { const fs = await import("node:fs"), path = await import("node:path"); const p = path.join(dd, "projects"); if (!fs.existsSync(p)) return c.json([]); return c.json(fs.readdirSync(p).map(d => { try { const j = path.join(p, d, "project.json"); return fs.existsSync(j) ? JSON.parse(fs.readFileSync(j, "utf-8")) : null; } catch { return null; } }).filter(Boolean)); } catch (e) { return c.json({ error: e.message }, 500); } });
@@ -45,7 +46,7 @@ export default function (app, ctx) {
   app.delete("/api/world/locations/:locId", async c => { try { const fs = await import("node:fs"), path = await import("node:path"); const lid = c.req.param("locId"); const fp = path.join(dd, "world.json"); if (!fs.existsSync(fp)) return c.json({ ok: false, error: "not found" }); const data = JSON.parse(fs.readFileSync(fp, "utf-8")); data.locations = data.locations.filter(l => l.id !== lid); fs.writeFileSync(fp, JSON.stringify(data, null, 2), "utf-8"); return c.json({ ok: true }); } catch (e) { return c.json({ error: e.message }, 500); } });
   app.get("/app", (c) => {
     const token = c.req.query("token") || "", hcss = c.req.query("hana-css") || "", base = "/api/plugins/" + pid;
-    return c.html('<!DOCTYPE html><html><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>墨述</title>' + (hcss ? '<link rel="stylesheet" href="' + hcss + '">' : "") + '<style>' + APPCSS + '</style></head><body><div id=root></div><script>var API=' + JSON.stringify(base) + ',TOKEN=' + JSON.stringify(token) + ';' + VIEW_UTILS + VIEW_WRITING + VIEW_MAP + VIEW_DASH + '</script><script>' + APPJS + '</script></body></html>');
+    return c.html('<!DOCTYPE html><html><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>墨述</title>' + (hcss ? '<link rel="stylesheet" href="' + hcss + '">' : "") + '<style>' + APPCSS + '</style></head><body><div id=root></div><script>var API=' + JSON.stringify(base) + ',TOKEN=' + JSON.stringify(token) + ';' + VIEW_UTILS + VIEW_WRITING + VIEW_MAP + VIEW_DASH + VIEW_TLVIZ + '</script><script>' + APPJS + '</script></body></html>');
   });
   app.get("/world", async (c) => {
     const token = c.req.query("token") || "", hcss = c.req.query("hana-css") || "", base = "/api/plugins/" + pid;
@@ -61,6 +62,21 @@ export default function (app, ctx) {
   app.get("/workbench", (c) => { return c.html('<!DOCTYPE html><html><head><meta charset=UTF-8><title>墨述</title></head><body><h1>墨述</h1><p>请更新侧栏入口</p><script>try{parent.postMessage({type:"ready"},"*")}catch(e){}</script></body></html>'); });
   app.get("/dashboard", (c) => { return c.html('<!DOCTYPE html><html><head><meta charset=UTF-8><title>墨述</title></head><body><h1>墨述</h1><p>请更新侧栏入口</p><script>try{parent.postMessage({type:"ready"},"*")}catch(e){}</script></body></html>'); });
   app.get("/map", (c) => { return c.html('<!DOCTYPE html><html><head><meta charset=UTF-8><title>墨述</title></head><body><h1>墨述</h1><p>请更新侧栏入口</p><script>try{parent.postMessage({type:"ready"},"*")}catch(e){}</script></body></html>'); });
+
+  // 时间线数据
+  app.get("/api/project/:id/timeline-data", async (c) => {
+    const id = safeProjectId(c.req.param("id"));
+    if (!id) return c.json({ error: "bad id" }, 400);
+    try {
+      const fs = await import("node:fs"), path = await import("node:path");
+      const p2 = path.join(dd, "projects", id);
+      const sp = path.join(p2, "structure.json");
+      const ip = path.join(p2, "chapters.json");
+      const timeline = fs.existsSync(sp) ? JSON.parse(fs.readFileSync(sp, "utf-8")).timeline || [] : [];
+      const chapters = fs.existsSync(ip) ? JSON.parse(fs.readFileSync(ip, "utf-8")).chapters || [] : [];
+      return c.json({ ok: true, timeline, chapters });
+    } catch (e) { return c.json({ error: e.message }, 500); }
+  });
 
   // 交叉验证
   app.get("/api/project/:id/cross-validate", async (c) => {
