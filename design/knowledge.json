@@ -1,0 +1,41 @@
+{
+  "$schema": "knowledge-spec-v1",
+  "version": 1,
+  "rules": [
+    {
+      "id": "rule_001",
+      "name": "魔法规则",
+      "category": "power_system",
+      "priority": 1,
+      "premise": "持有魔核",
+      "effect": "可使用对应属性魔法",
+      "cost": "消耗精神力，每天上限3次",
+      "limitation": "不能对同一目标连续施法",
+      "conflicts": [],
+      "sourceChapter": null,
+      "tags": []
+    }
+  ],
+  "terms": [
+    {
+      "id": "term_001",
+      "term": "魔核",
+      "definition": "魔法师体内的核心器官，储存魔力的容器",
+      "category": "power_system",
+      "aliases": [],
+      "firstAppearance": null,
+      "relatedTerms": [],
+      "tags": []
+    }
+  ],
+  "lore": [
+    {
+      "id": "lore_001",
+      "title": "大陆历史",
+      "content": "",
+      "category": "history",
+      "sourceChapter": null,
+      "tags": []
+    }
+  ]
+}

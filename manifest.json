@@ -1,0 +1,56 @@
+{
+  "manifestVersion": 1,
+  "id": "mo-shu",
+  "name": "墨述",
+  "version": "0.3.0",
+  "description": "墨述 (Ink Narrative) — Hanako 写作工具箱",
+  "minAppVersion": "0.0.0",
+  "trust": "full-access",
+  "contributes": {
+    "configuration": {
+      "properties": {
+        "exportPath": {
+          "type": "string",
+          "default": "",
+          "title": "导出路径",
+          "description": "导出文件的输出目录（留空则使用插件数据目录下的 export 文件夹）",
+          "ui": { "control": "text" }
+        }
+      }
+    },
+    "tools": [
+      { "source": "tools/ping.js" },
+      { "source": "tools/create-project.js" },
+      { "source": "tools/list-projects.js" },
+      { "source": "tools/project-info.js" },
+      { "source": "tools/update-card.js" },
+      { "source": "tools/get-cards.js" },
+      { "source": "tools/fact-mgr.js" },
+      { "source": "tools/chapter.js" },
+      { "source": "tools/context.js" },
+      { "source": "tools/analyze.js" },
+      { "source": "tools/guided-init.js" },
+      { "source": "tools/map.js" },
+      { "source": "tools/map-links.js" },
+      { "source": "tools/export.js" },
+      { "source": "tools/dashboard.js" },
+      { "source": "tools/storygame.js" },
+      { "source": "tools/search.js" },
+      { "source": "tools/extra.js" },
+      { "source": "tools/reorder.js" },
+      { "source": "tools/merge.js" },
+      { "source": "tools/structure.js" },
+      { "source": "tools/knowledge.js" },
+      { "source": "tools/graph.js" },
+      { "source": "tools/diff.js" }
+    ],
+    "page": {
+      "title": { "zh": "墨述", "en": "Ink Narrative" },
+      "icon": "<svg viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z\" stroke=\"#d49a6a\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+      "route": "/app"
+    }
+  },
+  "ui": {
+    "hostCapabilities": ["external.open", "clipboard.writeText"]
+  }
+}

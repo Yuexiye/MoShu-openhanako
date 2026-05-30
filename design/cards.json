@@ -1,0 +1,88 @@
+{
+  "$schema": "cards-spec-v1",
+  "version": 1,
+  "characters": [
+    {
+      "id": "chara_001",
+      "name": "示例角色",
+      "type": "characters",
+      "tags": [],
+      "created_at": "",
+      "updated_at": "",
+      "content": {
+        "basic": {
+          "name": "",
+          "age": "",
+          "gender": "",
+          "appearance": "",
+          "identity": ""
+        },
+        "personality": {
+          "traits": [],
+          "description": "",
+          "quirks": []
+        },
+        "background": {
+          "origin": "",
+          "history": "",
+          "motivation": ""
+        },
+        "relationships": [
+          {
+            "targetId": null,
+            "targetName": "",
+            "type": "friend|enemy|lover|family|rival|acquaintance",
+            "description": "",
+            "dynamic": ""
+          }
+        ],
+        "arc": [
+          {
+            "stage": "开端|发展|转折|高潮|结局",
+            "chapterId": "",
+            "label": "",
+            "description": ""
+          }
+        ],
+        "abilities": [
+          {
+            "name": "",
+            "description": "",
+            "limitations": ""
+          }
+        ],
+        "notes": ""
+      }
+    }
+  ],
+  "world": [
+    {
+      "id": "world_001",
+      "name": "世界观",
+      "type": "world",
+      "tags": [],
+      "content": {
+        "era": "",
+        "geography": "",
+        "society": "",
+        "technology": "",
+        "culture": ""
+      }
+    }
+  ],
+  "style": [
+    {
+      "id": "style_001",
+      "name": "文风指南",
+      "type": "style",
+      "tags": [],
+      "content": {
+        "pov": "",
+        "tense": "",
+        "tone": "",
+        "pacing": "",
+        "forbidden": []
+      }
+    }
+  ]
+}
