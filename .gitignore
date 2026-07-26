@@ -3,4 +3,4 @@ node_modules/
 *.log
 plugin-data/
 plugin-dev-runs/
-export/
+export/PROJECT_LOG.md
