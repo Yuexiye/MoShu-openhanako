@@ -1,0 +1,49 @@
+{
+  "$schema": "structure-spec-v1",
+  "version": 1,
+  "parts": [
+    {
+      "id": "p1",
+      "title": "第一部：黎明",
+      "type": "part",
+      "order": 1,
+      "summary": "",
+      "children": [
+        {
+          "id": "v1",
+          "title": "第一卷",
+          "type": "volume",
+          "order": 1,
+          "summary": "",
+          "children": [
+            { "id": "ch_01", "title": "第一章", "type": "chapter", "order": 1 }
+          ]
+        }
+      ]
+    }
+  ],
+  "arcs": [
+    {
+      "id": "arc1",
+      "title": "主角成长",
+      "color": "#d49a6a",
+      "type": "character",
+      "characterId": null,
+      "nodes": [
+        { "chapterId": "ch_01", "label": "觉醒", "nodeType": "core", "order": 1 }
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "id": "t1",
+      "label": "王国建立",
+      "date": "纪元前100年",
+      "fuzzy": true,
+      "eventType": "background",
+      "chapters": [],
+      "flashback": false,
+      "description": ""
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "mo-shu",
+  "version": "0.3.0",
+  "type": "module",
+  "private": true,
+  "description": "墨述 (Ink Narrative) — Hanako 写作工具箱"
+}
