@@ -120,9 +120,9 @@ async function execute(input) {
       return { content: [{ type: "text", text: out.join("\n") }] };
     }
 
-    return { content: [{ type: "text", text": "❌ 未知操作" }] };
+    return { content: [{ type: "text", text: "❌ 未知操作" }] };
   } catch (e) {
-    return { content: [{ type: "text", text": "❌ " + e.message }] };
+    return { content: [{ type: "text", text: "❌ " + e.message }] };
   }
 }
 
